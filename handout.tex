@@ -1,0 +1,32 @@
+\documentclass{mywork}
+\addtolength{\headheight}{\baselineskip}
+\lhead{ISem 18\\ \today}
+\chead{Heat equation perturbed by an inverse-square potential}
+\rhead{\theauthor}
+\renewcommand{\theta}{\vartheta}
+\newcommand{\D}{\mathbb{D}}
+\cfoot[LE,RO]{\bfseries\color{gray} -~\thepage~-}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows,chains,matrix,positioning,scopes, shapes}
+\usepackage{mathtools}
+\begin{document}
+
+\section{Ornstein-Uhlenbeck semigroups}
+Let B be a positive hermitian $N\times N$ matrix. Then
+\begin{align}\label{test}
+Lu=\Delta u- B x \cdot \nabla u
+\end{align}
+is the Ornstein-Uhlenbeck operator for $\phi \in C_c^\infty(\mathbb R^n)$. The corresponding semigroup is given by
+\begin{align}
+T(t) \phi(x) &=(4\pi)^{-N/2} (\det Q_t)^{-1/2} \int_{\mathbb R^n} \phi(y) e^{-\frac{1}{4} Q_t^{-1}(e^{-tB} x-y) \cdot e^{-tB} x-y}\, \dx[y]\\
+&= \int_{\mathbb R^n} \phi(y) \mathcal N(e^{-tB} x, Q_t)(\dx[y]), \phi \in C_b(\mathbb R^n),
+\end{align}
+where $\mathcal N(e^{-tB} x, Q_t)(\dx[y]):=(4\pi)^{-N/2} $ %
+$(\det Q_t)^{-1/2} e^{-\frac{1}{4} Q_t^{-1} e^{-tB x - y}\cdot e^{-tB x-y}}\, \dx[y]$ is the Gaussian measure with mean $e^{-tB}x$ and covariance $Q_t:= \int_0^t e^{-sB} e^{-sB*}\,\dx[s]$.  Then the 
+
+\begin{thebibliography}{tief}
+\bibitem{1} Abdelaziz Rhandi: {\it Heat and Ornstein-Uhlenbeck semigroups perturbed by an inverse-square potential}. 
+                     Unpublished, 2015.
+\end{thebibliography} 
+
+\end{document}

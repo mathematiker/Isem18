@@ -1,0 +1,248 @@
+\documentclass{beamer}
+
+
+\usepackage{color}
+\usepackage{listings}
+\usepackage{courier}
+\lstset{
+basicstyle=\tiny\ttfamily, % Standardschrift
+numbers=left, % Ort der Zeilennummern
+tabsize=4, % Groesse von Tabs
+}
+\lstloadlanguages{C++}
+%\DeclareCaptionFont{blue}{\color{blue}}
+ 
+%\captionsetup[lstlisting]{singlelinecheck=false, labelfont={blue}, textfont={blue}}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{8}{\parbox{\textwidth}{\hspace{15pt}#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, singlelinecheck=false, margin=10pt, font={bf,footnotesize}}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{ngerman}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[arrow, matrix, curve]{xy}
+\renewcommand{\phi}{\varphi}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\bar}{\overline}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\D}{\mathbb{D}}
+ \setbeamertemplate{theorems}[numbered]
+
+\theoremstyle{definition} 
+\newcounter{foo}
+\newtheorem{df}[foo]{Definition}
+\newtheorem{thm}[foo]{Theorem}
+\newtheorem{kor}[foo]{Korrolar}
+\newtheorem{ex}[foo]{Beispiel}
+\newtheorem{lem}[foo]{Lemma}
+\newtheorem{bem}[foo]{Bemerkung}
+\newtheorem*{bem*}{Bemerkung}
+\newtheorem{prop}[foo]{Proposition}
+
+
+\title{Dynamische Systeme}
+\author{Matthias Hofmann}
+\date{\today}
+
+\usepackage{beamerthemesplit}
+
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\frametitle{Gliederung}
+	\tableofcontents
+\end{frame}
+
+\section{Motivation: das Newton-Verfahren}
+\begin{frame}
+\frametitle{Motivation: das Newton-Verfahren}
+Die Newtoniteration ist gegeben durch die Abbildung
+\[
+	\Phi(z)=z-\frac{f(z)}{f'(z)}.
+\]
+Dabei ist für einen Startwert $z_0$ folgendes Verhalten denkbar
+\begin{itemize}
+\item Die Newtoniteration konvergiert gegen eine Nullstelle von $f$,
+\item Das Newtoniteration konvergiert nicht.
+\end{itemize}
+
+Das Newton-Verfahren konvergiert lokal. Wie ist das Konvergenzverhalten außerhalb dieser Konvergenzumgebung?
+
+$\longrightarrow$ Newton-Fraktale.
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{fraktal.png}
+\caption{Newton-Fraktal für $f(z)=z^4-1$}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+Dies motiviert das Konzept der \emph{Fatou-} bzw. \emph{Juliamenge}:
+\begin{description}
+\item[Fatou-Menge] Die Startwerte aus dieser Menge führen unter Iteration zu einer ,,stetigen`` Dynamik, das heißt, eine kleine Änderung des Startwert führt zu einer ähnlichen Dynamik.
+\item[Julia-Menge] Beschreibt die Menge der Startpunkte, die zu den ,,instabilen`` Prozessen gehören. Jede noch so kleine Änderung des Startwerts führt zu einer komplett anderen Dynamik.
+\end{description} 
+Notation: $F(f)$ bezeichnet die Fatoumenge von $f$ und $J(f)$ analog die Juliamenge von $f$.
+\end{frame}
+
+\section{Allgemeine Definitionen}
+\begin{frame}
+\frametitle{Charakterisierung periodischer Punkte}
+\begin{df} \label{1}
+Sei $z_0$ periodischer Punkt bzgl. $f$ mit Periode n, d.h. $f^n(z_0)=z_0$. Dann heißt er
+\begin{itemize}
+\item \emph{stark anziehend}, falls $|(f^n)'(z_0)|=0$,
+\item \emph{anziehend}, falls $0<|(f^n)'(z_0)|<1$,
+\item \emph{indifferent}, wenn $|(f^n)'(z_0)|=1$,
+\item \emph{abstoßend}, wenn $|(f^n)'(z_0)|>1$.
+\end{itemize} 
+\end{df}
+\end{frame}
+
+\begin{frame}
+\begin{df}[Einzugsgebiet] \label{2}
+Ist $z_0$ ein anziehender periodischer Punkt von $f$, dann ist die Menge
+\[
+	A_f(z_0)=\{z\in \overline{\mathbb{C}}: \exists_{L\subset \N} \, \lim\limits_{L\ni k\to \infty} f^{k}(z)=z_0\}
+\]
+das \emph{Einzugsgebiet} (engl. \emph{basin of attraction}) von $z_0$ bzgl. $f$.
+\end{df}
+\end{frame}
+
+\begin{frame}
+\begin{df}[Julia-Menge] \label{3}
+Wir definieren die Julia-Menge durch
+\[
+J(f):=\overline{\{z\in \overline{\mathbb{C}}: z \text{ abstossender periodischer Punkt von $f$} \}}
+\]
+Und die Fatou-Menge durch $F(f)=J(f)^c$
+\end{df}
+\end{frame}
+
+\section{Normale Familien und exzeptionelle Punkte}
+\begin{frame}
+\frametitle{Normale Familie und exzeptionelle Punkte}
+\begin{df} \label{4}
+Eine Familie $\{F_n\}$ analytischer Funktionen operiert \emph{normal} auf $U$, falls jede Folge $(F_{n_i})_{i\in \mathbb{N}}$ eine Teilfolge $(F_{n_{i_j}})_{j\in \N}$ besitzt, sodass einer der beiden Eigenschaften erfüllt ist:
+\begin{itemize}
+\item $F_{n_{i_j}}$ konvergiert gleichmäßig auf kompakten Mengen $K\subset U$.
+\item $F_{n_{i_j}}$ divergiert gleichmäßig gegen $\infty$ auf $U$.
+\end{itemize}
+Eine Familie $\{F_n\}$ analytischer Funktionen operiert \emph{nicht normal} bei $z_0$, falls er in keiner Umgebung \emph{normal} operiert.
+\end{df}
+\end{frame}
+
+\begin{frame}
+\begin{ex}\label{5}
+Betrachte die Funktion $F$, gegeben durch $F(x)=ax$. Definiere die Familie $\{F^n\}$.
+
+\textbf{Fall 1: $0<|a|<1$.} so konvergiert für jede kompakte Teilmenge die Funktionenfolge $F^n(z)=a^n\cdot z$ gleichmäßig gegen 0. Also operiert $\{F^n\}$ normal auf jeder Umgebung $U\subset \C$. 
+
+$\longrightarrow J(f)=\{\infty\}, F(f)=\mathbb{C}$, $A_F(0)=\C$, $A_F(\infty)=\{\infty\}$.
+
+\textbf{Fall 2: $|a|>1$.} Die Familie $\{F^n\}$ operiert nicht normal bei $0$, denn für $z\neq 0$ konvergiert jede beliebige Teilfolge gegen $\infty$. Nun konvergiert aber $F^{n_{i_j}}$ für beliebige Teilfolgen bei $z=0$ gegen $0$.
+
+$\longrightarrow J(F)=\{0\}$, $F(f)=\overline{\C}\setminus \{0\}$, $A(0)=\{0\}$, $A(\infty)=\bar{\C}\setminus \{0\}$. 
+\end{ex}
+\end{frame}
+
+\begin{frame}
+\begin{prop}\label{6}
+Sei $F$ analytisch, $z_0$ ein abstoßender periodischer Punkt bzgl. $F$. Dann operiert die Familie $\{F^n\}_{n\in \N}$ nicht normal bei $z_0$.
+\end{prop}
+
+\begin{kor} \label{7}
+Sei $F$ eine analytische Funktion. Die Familie $\{F^n\}_{n\in \N}$ operiert nicht normal für $z\in J(F)$.
+\end{kor}
+\end{frame}
+
+\begin{frame}
+\begin{thm}[Montels Theorem] \label{8}
+Sei $\{F_n\}$ eine Familie analytischer Funktionen auf einer Umgebung $U$. Angenommen es gibt $a,b \in \C, a\neq b$, sodass $F_n(z)\neq a \land F_n(z)\neq b$ für alle $n\in \N$ und $z\in U$. Dann operiert $\{F_n\}$ normal auf $U\subset \C$. (ohne Beweis) 
+\end{thm}
+
+\begin{kor} \label{9}
+Sei $F$ eine analytische Funktion. Sei $z_0\in J(F)$ und sei $U$ eine beliebige Umgebung von $z_0$. Dann existiert höchstens ein $a\in \C$ mit
+\[
+	a\not\in \bigcup_{n=1}^\infty F^n(U).
+\]
+Wir nennen einen solchen Punkt \emph{exzeptionellen Punkt.}
+\end{kor}
+\end{frame}
+
+\begin{frame}
+\begin{thm}\label{10}
+Sei $P$ ein Polynom mit Grad $\ge 2$. Angenommen es gibt einen Punkt $z_0\in J(P)$ samt einer Umgebung $U$ von $z_0$ und ein $a\in \C$, sodass 
+\[
+\bigcup_{n=0}^\infty P^{n}(U)=\C\setminus\{a\}
+\]
+so folgt $P(z)=a+\lambda(z-a)^k$ für $\lambda \in \C, k\in \N$ geeignet. 
+Insbesondere ist $P$ mit Grad $n\ge 2$ topologisch konjugiert zu $Q: z \mapsto z^n$, d.h. 
+das ein Homöomorphismus $H$ existiert mit $Q\circ H=H\circ P$.
+\end{thm}
+\end{frame}
+\begin{frame}
+\begin{ex} \label{11}
+Für $Q(z)=z^n$, $n\ge 2$ folgt $J(Q)=S^1$. Sei $U$ eine Umgebung um $z_0\in S^1$ mit $0\not\in U$, dann folgt 
+\[
+0\not\in \bigcup_{k=0}^\infty Q^k(U).
+\] 
+Insbesondere ist $a=0$ exzeptioneller Punkt.
+\end{ex}
+\end{frame}
+
+\section{Periodische Punkte}
+\begin{frame}
+\frametitle{periodische Punkte}
+\begin{thm}[Koenigs Linearisationstheorem] \label{12}
+Sei $f$ eine analytische Funktion mit $f(0)=0$ und $f'(0)=\lambda$ mit 
+$|\lambda|\not\in\{0,1\}$, dann existiert ein Diffeomorphismus $\phi: U\to V$ mit 
+$\phi(0)=0$, sodass 
+\begin{align}
+\phi \circ f(z)=\lambda\cdot \phi(z)  \label{*}\tag{$*$}
+\end{align}
+für $z\in U$, wobei $U$ und $V$ Umgebungen von $0$ sind. Dieses $\phi$ ist bis auf Multiplikation mit einer Konstanten eindeutig.
+\end{thm}
+\end{frame}
+
+\begin{frame}
+\begin{prop} \label{13}
+Sei $z_0$ ein anziehender periodischer Punkt bzgl. einer analytischen Funktion $f$, so existiert eine Umgebung $U$ um $z_0$, sodass $U\subset A_f(z_0)$. Wir nennen die Zusammenhangskomponente von $z_0\in A_f(z_0)$ auch das \emph{unmittelbare Einzugsgebiet} (engl. \emph{immediate basin of attraction}) von $z_0$ bzgl. $f$.
+\end{prop}
+\end{frame}
+
+\begin{frame}
+\begin{ex} \label{14}
+Sei $P$ ein Polynom vom Grad $n\ge 2$, dann ist $\infty$ ein stark anziehender Fixpunkt bzgl. $P$. Tatsächlich ist 
+\begin{align*}
+|P'(\infty)|&=\lim_{z\to 0}\Bigg|\frac{\mathrm{d}}{\mathrm{d}z}\Bigg[\frac{1}{P(1/z)}\Bigg]\Bigg|\\ &=\lim_{z\to 0}\Bigg|\frac{P'(1/z)}{z^2 P(1/z)^2}\Bigg|\\ &=\lim_{z\to 0} \underbrace{|z|^{n+1}}_{\to 0} \underbrace{\Bigg|\frac{z^{n-1} P'(1/z)}{z^{2n-2}z^2 P(1/z)^2}\Bigg|}_{\text{beschränkt}}=0.
+\end{align*}
+\end{ex}
+\end{frame}
+
+\begin{frame}
+\begin{thm} \label{last}
+Sei P ein Polynom vom Grad $n\ge 2$ und sei $z_0$ ein (stark) anziehender periodischer Punkt von $P$. Dann liegt im Einzugsgebiet von $z_0$ bzgl. $P$ ein kritischer Punkt.
+\end{thm}
+
+\begin{bem*}
+$z_0=\infty$ ist ein stark anziehender Punkt. Insbesondere ist $z_0$ kritisch nach Beispiel~\ref{14}.
+\end{bem*}
+\end{frame}
+
+
+\end{document}
